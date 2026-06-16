@@ -1,0 +1,68 @@
+# -------------------------
+# AegisFleet Git Ignore
+# -------------------------
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+env/
+pip-wheel-metadata/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Logs
+*.log
+logs/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Docker
+docker-compose.override.yml
+
+# Terraform
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+crash.log
+crash.*.log
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+terraform.tfvars
+terraform.tfvars.json
+
+# Ansible
+*.retry
+
+# Grafana / Prometheus local data
+grafana-data/
+prometheus-data/
+
+# Local database dumps
+*.sql.gz
+*.dump
+
+# Temporary safety backups
+*.bak*
+*.broken*
