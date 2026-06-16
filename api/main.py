@@ -47,7 +47,7 @@ low_battery_vehicles = Gauge(
 
 unhealthy_vehicles = Gauge(
     "unhealthy_vehicles",
-    "Current number of vehicles whose latest health status is not healthy",
+    "Current number of vehicles whose latest health status is not healthy/ok",
 )
 
 
@@ -85,7 +85,7 @@ def update_operational_metrics():
         sum(
             1
             for vehicle in latest_vehicle_state.values()
-            if vehicle["health_status"].lower() != "healthy"
+            if vehicle["health_status"].lower() not in {"healthy", "ok"}
         )
     )
 
