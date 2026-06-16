@@ -6,6 +6,8 @@ from fastapi import FastAPI, HTTPException, Response
 from prometheus_client import CONTENT_TYPE_LATEST, Counter, Gauge, generate_latest
 from pydantic import BaseModel, Field, field_validator
 
+from api.database import save_telemetry_event
+
 
 logging.basicConfig(
     level=logging.INFO,
@@ -104,6 +106,18 @@ def receive_telemetry(payload: TelemetryPayload):
     vehicle_data = payload.model_dump()
     vehicle_data["received_at"] = received_at
 
+    try:
+        telemetry_event_id = save_telemetry_event(vehicle_data)
+    except Exception:
+        logger.exception(
+            "failed to persist telemetry | vehicle_id=%s",
+            payload.vehicle_id,
+        )
+        raise HTTPException(
+            status_code=503,
+            detail="Telemetry persistence unavailable",
+        )
+
     latest_vehicle_state[payload.vehicle_id] = vehicle_data
     telemetry_events_received.inc()
     update_operational_metrics()
@@ -124,6 +138,7 @@ def receive_telemetry(payload: TelemetryPayload):
         "message": "Telemetry received",
         "vehicle_id": payload.vehicle_id,
         "received_at": received_at,
+        "telemetry_event_id": telemetry_event_id,
     }
 
 
