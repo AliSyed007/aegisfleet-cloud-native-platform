@@ -3,7 +3,7 @@
 
 COMPOSE := docker compose
 
-.PHONY: help init-env build up up-infra stop-simulator down clean ps logs logs-api logs-simulator logs-prometheus logs-grafana health metrics prometheus-ready grafana-health wait-api wait-prometheus wait-grafana smoke cold-start
+.PHONY: help init-env build up up-infra stop-simulator down clean ps logs logs-api logs-simulator logs-prometheus logs-grafana health metrics prometheus-ready grafana-health wait-api wait-prometheus wait-grafana check-git check-python check-compose check-readme quality test smoke cold-start
 
 help:
 > @echo "AegisFleet local operations"
@@ -35,6 +35,12 @@ help:
 > @echo "  make wait-api           Wait until API is ready"
 > @echo "  make wait-prometheus    Wait until Prometheus is ready"
 > @echo "  make wait-grafana       Wait until Grafana is healthy"
+> @echo "  make check-git          Check Git whitespace errors"
+> @echo "  make check-python       Check Python syntax"
+> @echo "  make check-compose      Validate Docker Compose config"
+> @echo "  make check-readme       Check README markdown code fences"
+> @echo "  make quality            Run local non-runtime quality gates"
+> @echo "  make test               Alias for quality"
 > @echo "  make smoke              Run local smoke checks with readiness waits"
 > @echo "  make cold-start         Rebuild from clean local volumes"
 
@@ -132,6 +138,24 @@ wait-grafana:
 > done; \
 > echo "ERROR: Grafana did not become healthy"; \
 > exit 1
+
+
+check-git:
+> git diff --check
+
+check-python:
+> python3 -m py_compile api/main.py api/database.py simulator/main.py
+
+check-compose:
+> $(COMPOSE) config >/dev/null
+
+check-readme:
+> @awk 'BEGIN { count=0 } /^```/ { count++ } END { print "Markdown code fence count:", count; if (count % 2 != 0) { print "ERROR: Unbalanced markdown code fences"; exit 1 } else { print "OK: Markdown code fences are balanced" } }' README.md
+
+quality: check-git check-python check-compose check-readme
+> @echo "Local quality gates passed"
+
+test: quality
 
 smoke: wait-api wait-prometheus wait-grafana
 > @echo "== Docker Compose status =="
