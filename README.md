@@ -382,6 +382,7 @@ Use the clean command before a full cold-start smoke test.
 | Phase 7 | Local operational hygiene and developer workflow | Complete    | local Makefile workflow and smoke checks  |
 | Phase 8 | Local quality gates and CI readiness              | Complete    | local quality checks and test alias       |
 | Phase 9 | GitHub Actions CI baseline                        | Complete    | quality gate workflow on GitHub Actions   |
+| Phase 10 | CI Docker build validation                       | Complete    | API and simulator image builds in CI      |
 
 ## Continuous Integration
 
@@ -391,7 +392,7 @@ Workflow file: `.github/workflows/ci.yml`
 
 The CI workflow runs on pushes and pull requests. It performs the same local quality gate used during development: `make quality`.
 
-The workflow currently validates Git whitespace checks, Python syntax checks, Docker Compose configuration, and README markdown code fence balance.
+The workflow currently validates Git whitespace checks, Python syntax checks, Docker Compose configuration, README markdown code fence balance, and Docker image builds for the API and simulator.
 
 This keeps local development and CI behavior aligned before adding heavier test stages.
 
