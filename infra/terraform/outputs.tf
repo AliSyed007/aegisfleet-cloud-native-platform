@@ -1,3 +1,13 @@
+output "vpc_id" {
+  description = "AegisFleet VPC ID."
+  value       = aws_vpc.aegisfleet.id
+}
+
+output "public_subnet_id" {
+  description = "AegisFleet public subnet ID."
+  value       = aws_subnet.public.id
+}
+
 output "instance_id" {
   description = "EC2 instance ID."
   value       = aws_instance.aegisfleet.id
@@ -10,7 +20,7 @@ output "public_ip" {
 
 output "ssh_command" {
   description = "SSH command for connecting to the EC2 instance."
-  value       = "ssh ubuntu@${aws_instance.aegisfleet.public_ip}"
+  value       = "ssh -i ~/.ssh/aegisfleet_aws ubuntu@${aws_instance.aegisfleet.public_ip}"
 }
 
 output "api_url" {

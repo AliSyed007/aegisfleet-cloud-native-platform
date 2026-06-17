@@ -1,0 +1,86 @@
+---
+- name: Bootstrap AegisFleet EC2 host
+  hosts: aegisfleet
+  become: true
+
+  vars:
+    app_user: ubuntu
+    app_root: /opt/aegisfleet
+    app_dir: /opt/aegisfleet/app
+    repo_url: "https://github.com/AliSyed007/aegisfleet-cloud-native-platform.git"
+    repo_branch: "main"
+
+  tasks:
+    - name: Update apt cache
+      ansible.builtin.apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install base packages
+      ansible.builtin.apt:
+        name:
+          - ca-certificates
+          - curl
+          - git
+          - make
+          - python3
+          - docker.io
+          - docker-compose-v2
+        state: present
+
+    - name: Ensure Docker service is enabled and running
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: true
+
+    - name: Add ubuntu user to docker group
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        groups: docker
+        append: true
+
+    - name: Create AegisFleet root directory
+      ansible.builtin.file:
+        path: "{{ app_root }}"
+        state: directory
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0755"
+
+    - name: Clone AegisFleet repository
+      ansible.builtin.git:
+        repo: "{{ repo_url }}"
+        dest: "{{ app_dir }}"
+        version: "{{ repo_branch }}"
+        force: true
+      become_user: "{{ app_user }}"
+
+    - name: Create .env from .env.example if missing
+      ansible.builtin.copy:
+        src: "{{ app_dir }}/.env.example"
+        dest: "{{ app_dir }}/.env"
+        remote_src: true
+        owner: "{{ app_user }}"
+        group: "{{ app_user }}"
+        mode: "0600"
+        force: false
+
+    - name: Build and start Docker Compose stack
+      ansible.builtin.command:
+        cmd: docker compose up -d --build
+        chdir: "{{ app_dir }}"
+      changed_when: true
+
+    - name: Wait for API health endpoint
+      ansible.builtin.uri:
+        url: http://127.0.0.1:8000/health
+        status_code: 200
+      register: api_health
+      retries: 20
+      delay: 3
+      until: api_health.status == 200
+
+    - name: Show API health result
+      ansible.builtin.debug:
+        msg: "AegisFleet API is healthy on the EC2 host."
