@@ -5,11 +5,15 @@ ENV PYTHONUNBUFFERED=1
 
 WORKDIR /app
 
+RUN useradd --create-home --shell /usr/sbin/nologin aegisfleet
+
 COPY api/requirements.txt ./api/requirements.txt
 
 RUN pip install --no-cache-dir -r ./api/requirements.txt
 
 COPY api ./api
+
+USER aegisfleet
 
 EXPOSE 8000
 
