@@ -226,12 +226,15 @@ Useful commands:
 | `make down`           | Stop containers but keep volumes                      |
 | `make clean`          | Stop containers and remove volumes/orphans            |
 | `make ps`             | Show container status                                 |
+| `make quality`        | Run local non-runtime quality gates                   |
+| `make test`           | Alias for `make quality`                              |
 | `make smoke`          | Run readiness-aware local smoke checks                |
 | `make cold-start`     | Rebuild from clean local volumes and run smoke checks |
 
 Recommended local review workflow:
 
 ```bash
+make quality
 make up-infra
 make smoke
 ```
@@ -377,6 +380,7 @@ Use the clean command before a full cold-start smoke test.
 | Phase 5 | Grafana dashboards and provisioning              | Complete    | `v0.5.0-phase5-grafana-stable`             |
 | Phase 6 | README and architecture documentation            | Complete    | `v0.6.0-phase6-readme-architecture-stable` |
 | Phase 7 | Local operational hygiene and developer workflow | Complete    | local Makefile workflow and smoke checks  |
+| Phase 8 | Local quality gates and CI readiness              | Complete    | local quality checks and test alias       |
 
 ## Production-Minded Design Decisions
 
