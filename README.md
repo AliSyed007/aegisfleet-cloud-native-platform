@@ -1,5 +1,7 @@
 # AegisFleet — Real-Time Fleet Intelligence Platform
 
+[![AegisFleet CI](https://github.com/AliSyed007/aegisfleet-cloud-native-platform/actions/workflows/ci.yml/badge.svg)](https://github.com/AliSyed007/aegisfleet-cloud-native-platform/actions/workflows/ci.yml)
+
 AegisFleet is a production-style DevOps and Cloud Engineering portfolio project that simulates real-time vehicle telemetry and runs a local observability-focused backend platform using Docker Compose.
 
 The project is intentionally built in phases to show practical system design, infrastructure discipline, observability, persistence, local operational hygiene, and production-minded engineering decisions.
