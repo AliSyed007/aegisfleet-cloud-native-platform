@@ -386,6 +386,8 @@ Use the clean command before a full cold-start smoke test.
 | Phase 9 | GitHub Actions CI baseline                        | Complete    | quality gate workflow on GitHub Actions   |
 | Phase 10 | CI Docker build validation                       | Complete    | API and simulator image builds in CI      |
 | Phase 11 | CI Docker Compose smoke test                     | Complete    | infrastructure stack smoke test in CI     |
+| Phase 12 | Release polish and reviewer experience            | Complete    | CI badge and reviewer-facing main branch  |
+| Phase 13 | Container hardening and runtime hygiene           | Complete    | API container runs as non-root user       |
 
 ## Continuous Integration
 
@@ -403,6 +405,7 @@ This keeps local development and CI behavior aligned before adding heavier test 
 
 This project is local-first at the current stage, but it is designed with production habits in mind:
 
+* Application containers are designed to avoid running as root where practical.
 * Services communicate through Docker Compose service names instead of localhost.
 * PostgreSQL runs as a dedicated service instead of using in-memory-only storage.
 * Database schema setup is handled through a migration file.
