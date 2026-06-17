@@ -292,7 +292,7 @@ Use the last command before a full cold-start smoke test.
 | Phase 3 | PostgreSQL persistence and Docker Compose | Complete    | `v0.3.0-phase3-compose-stable`    |
 | Phase 4 | Prometheus monitoring                     | Complete    | `v0.4.0-phase4-prometheus-stable` |
 | Phase 5 | Grafana dashboards and provisioning       | Complete    | `v0.5.0-phase5-grafana-stable`    |
-| Phase 6 | README and architecture documentation     | In Progress | pending                           |
+| Phase 6 | README and architecture documentation     | Complete    | `v0.6.0-phase6-readme-architecture-stable` |
 
 ## Production-Minded Design Decisions
 
