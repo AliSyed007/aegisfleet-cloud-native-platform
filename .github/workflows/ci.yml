@@ -31,3 +31,17 @@ jobs:
 
       - name: Build Docker images
         run: make build
+
+      - name: Start infrastructure stack
+        run: make up-infra
+
+      - name: Run Compose smoke test
+        run: make smoke
+
+      - name: Show Compose logs on failure
+        if: failure()
+        run: docker compose logs --no-color
+
+      - name: Clean up Compose stack
+        if: always()
+        run: docker compose down -v --remove-orphans
