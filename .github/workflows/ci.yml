@@ -1,0 +1,30 @@
+name: AegisFleet CI
+
+on:
+  push:
+    branches:
+      - main
+      - phase9-github-actions-ci
+  pull_request:
+
+jobs:
+  quality:
+    name: Local quality gates
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Show tool versions
+        run: |
+          python3 --version
+          make --version
+          docker --version
+          docker compose version
+
+      - name: Create local environment file
+        run: cp .env.example .env
+
+      - name: Run local quality gates
+        run: make quality
