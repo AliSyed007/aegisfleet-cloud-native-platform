@@ -376,7 +376,7 @@ Use the clean command before a full cold-start smoke test.
 | Phase 4 | Prometheus monitoring                            | Complete    | `v0.4.0-phase4-prometheus-stable`          |
 | Phase 5 | Grafana dashboards and provisioning              | Complete    | `v0.5.0-phase5-grafana-stable`             |
 | Phase 6 | README and architecture documentation            | Complete    | `v0.6.0-phase6-readme-architecture-stable` |
-| Phase 7 | Local operational hygiene and developer workflow | In Progress | pending                                    |
+| Phase 7 | Local operational hygiene and developer workflow | Complete    | local Makefile workflow and smoke checks  |
 
 ## Production-Minded Design Decisions
 
