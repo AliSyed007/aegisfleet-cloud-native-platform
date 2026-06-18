@@ -29,6 +29,14 @@ jobs:
       - name: Run local quality gates
         run: make quality
 
+      - name: Install kubectl
+        uses: azure/setup-kubectl@v4
+        with:
+          version: latest
+
+      - name: Validate Kubernetes manifests
+        run: make k8s-validate
+
       - name: Build Docker images
         run: make build
 

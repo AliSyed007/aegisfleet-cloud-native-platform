@@ -397,7 +397,7 @@ Workflow file: `.github/workflows/ci.yml`
 
 The CI workflow runs on pushes and pull requests. It performs the same local quality gate used during development: `make quality`.
 
-The workflow currently validates Git whitespace checks, Python syntax checks, Docker Compose configuration, README markdown code fence balance, Docker image builds for the API and simulator, and a Docker Compose smoke test for the local infrastructure stack.
+The workflow currently validates Git whitespace checks, Python syntax checks, Docker Compose configuration, README markdown code fence balance, Kubernetes manifest rendering with `kubectl kustomize`, Docker image builds for the API and simulator, and a Docker Compose smoke test for the local infrastructure stack.
 
 This keeps local development and CI behavior aligned before adding heavier test stages.
 
