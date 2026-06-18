@@ -401,6 +401,67 @@ The workflow currently validates Git whitespace checks, Python syntax checks, Do
 
 This keeps local development and CI behavior aligned before adding heavier test stages.
 
+## Cloud Deployment and Demo Proof
+
+AegisFleet has been validated beyond local development through a temporary AWS deployment.
+
+The cloud deployment used:
+
+* Terraform for AWS infrastructure provisioning.
+* Ansible for EC2 bootstrap and application startup.
+* Docker Compose on the EC2 host for running the application stack.
+* Prometheus and Grafana for live operational visibility.
+* GitHub Actions for CI validation before deployment.
+
+The live AWS demo verified:
+
+* API health endpoint reachable on port `8000`.
+* Prometheus reachable on port `9090`.
+* Grafana reachable on port `3000`.
+* Prometheus successfully scraping the API target.
+* Grafana dashboard showing live telemetry metrics.
+* Infrastructure folder containing Terraform, Ansible, and Kubernetes-ready manifests.
+
+After the demo and LinkedIn proof, the AWS resources were intentionally destroyed to avoid unnecessary cost.
+
+Current AWS status:
+
+* No EC2 instance is currently running for this project.
+* No public demo endpoint is currently live.
+* Terraform state was verified empty after destroy.
+* Any future AWS demo must be recreated deliberately using Terraform and Ansible.
+
+## Infrastructure as Code
+
+AegisFleet includes production-minded infrastructure automation under `infra/`.
+
+Terraform baseline:
+
+* Custom VPC.
+* Public subnet.
+* Internet gateway.
+* Route table and association.
+* Security group for SSH, API, Prometheus, and Grafana access.
+* Ubuntu EC2 instance.
+* Elastic IP.
+* Public outputs for SSH and service URLs.
+
+Ansible baseline:
+
+* Installs required system packages.
+* Installs Docker and Docker Compose v2.
+* Enables Docker service.
+* Clones the project repository.
+* Creates the runtime environment file.
+* Starts the stack using Docker Compose.
+* Verifies the API health endpoint on the EC2 host.
+
+Kubernetes baseline:
+
+* Kubernetes-ready manifests are available under `infra/kubernetes`.
+* The manifests are prepared for future validation and deployment.
+* Kubernetes was not deployed in the completed demo phase.
+
 ## Production-Minded Design Decisions
 
 This project is local-first at the current stage, but it is designed with production habits in mind:
@@ -417,37 +478,51 @@ This project is local-first at the current stage, but it is designed with produc
 * Metrics are intentionally simple, readable, and useful for operations.
 * Git branches and stable tags are used to preserve clean phase checkpoints.
 
+
 ## Current Status
 
-The project currently runs successfully as a local Docker Compose platform with:
+The project currently has a stable local-first platform with:
 
-* API
-* PostgreSQL
-* Prometheus
-* Grafana
-* Provisioned Grafana dashboard
-* Simulator available but stoppable
-* Makefile-based local operations
-* Readiness-aware smoke checks
+* FastAPI telemetry API.
+* PostgreSQL persistence.
+* Prometheus metrics.
+* Grafana dashboard provisioning.
+* Docker Compose orchestration.
+* Makefile-based local operations.
+* Readiness-aware smoke checks.
+* Local quality gates.
+* GitHub Actions CI.
+* Docker image build validation in CI.
+* Docker Compose smoke validation in CI.
+* Non-root API container runtime.
+* Compose healthchecks.
+* Terraform AWS baseline.
+* Ansible EC2 bootstrap.
+* Kubernetes-ready manifests.
 
-Current recommended operating mode during documentation and review:
+Current recommended local operating mode during documentation and review:
 
 ```bash
 make up-infra
 make smoke
 ```
 
+Current cloud status:
+
+* AWS demo was completed successfully.
+* AWS resources were destroyed after proof collection.
+* No public AWS endpoint is currently live.
+
 ## Next Planned Work
 
 Planned future phases may include:
 
-* CI/CD pipeline
-* Automated validation checks
-* Security improvements
-* Environment variable cleanup
-* Production-style secrets handling
-* Cloud deployment
-* Terraform infrastructure
-* Kubernetes deployment
+* Improve README demo proof section with non-sensitive screenshots.
+* Add GitHub repository topics and description.
+* Validate Kubernetes manifests locally with `kubectl kustomize`.
+* Optionally test Kubernetes manifests with `kind` or `minikube`.
+* Improve production-style secrets handling.
+* Add lightweight security checks.
+* Recreate AWS demo only when needed, then destroy resources again.
 
-Cloud, Terraform, and Kubernetes are intentionally not part of the current phase.
+Amazon EKS is intentionally not part of the current phase because it can add unnecessary cost for this portfolio stage.
