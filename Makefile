@@ -3,7 +3,7 @@
 
 COMPOSE := docker compose
 
-.PHONY: help init-env build up up-infra stop-simulator down clean ps logs logs-api logs-simulator logs-prometheus logs-grafana health metrics prometheus-ready grafana-health wait-api wait-prometheus wait-grafana check-git check-python check-compose check-readme quality test smoke cold-start
+.PHONY: help init-env build up up-infra stop-simulator down clean ps logs logs-api logs-simulator logs-prometheus logs-grafana health metrics prometheus-ready grafana-health wait-api wait-prometheus wait-grafana check-git check-python check-compose check-readme k8s-validate quality test smoke cold-start
 
 help:
 > @echo "AegisFleet local operations"
@@ -32,6 +32,7 @@ help:
 > @echo "  make metrics            Show key API Prometheus metrics"
 > @echo "  make prometheus-ready   Check Prometheus readiness"
 > @echo "  make grafana-health     Check Grafana health"
+> @echo "  make k8s-validate       Render Kubernetes manifests with kubectl kustomize"
 > @echo "  make wait-api           Wait until API is ready"
 > @echo "  make wait-prometheus    Wait until Prometheus is ready"
 > @echo "  make wait-grafana       Wait until Grafana is healthy"
@@ -180,3 +181,9 @@ cold-start:
 > $(COMPOSE) down -v --remove-orphans
 > $(COMPOSE) up -d --build
 > $(MAKE) smoke
+
+
+k8s-validate:
+> kubectl kustomize infra/kubernetes >/tmp/aegisfleet-k8s-rendered.yaml
+> @echo "Kubernetes manifests rendered successfully"
+> @wc -l /tmp/aegisfleet-k8s-rendered.yaml
