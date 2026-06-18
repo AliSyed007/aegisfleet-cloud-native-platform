@@ -459,7 +459,8 @@ Ansible baseline:
 Kubernetes baseline:
 
 * Kubernetes-ready manifests are available under `infra/kubernetes`.
-* The manifests are prepared for future validation and deployment.
+* The manifests can be rendered locally with `make k8s-validate`.
+* Validation uses `kubectl kustomize` and does not deploy resources.
 * Kubernetes was not deployed in the completed demo phase.
 
 ## Production-Minded Design Decisions
@@ -499,6 +500,7 @@ The project currently has a stable local-first platform with:
 * Terraform AWS baseline.
 * Ansible EC2 bootstrap.
 * Kubernetes-ready manifests.
+* Kubernetes manifest render validation with `make k8s-validate`.
 
 Current recommended local operating mode during documentation and review:
 
@@ -519,7 +521,6 @@ Planned future phases may include:
 
 * Improve README demo proof section with non-sensitive screenshots.
 * Add GitHub repository topics and description.
-* Validate Kubernetes manifests locally with `kubectl kustomize`.
 * Optionally test Kubernetes manifests with `kind` or `minikube`.
 * Improve production-style secrets handling.
 * Add lightweight security checks.
